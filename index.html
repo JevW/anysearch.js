@@ -1,0 +1,38 @@
+ <!DOCTYPE html><html>
+<head>
+<meta charset="utf-8">
+<title>anysearch jQuery Plugin</title>        
+<meta name="author" content="Jev">
+<link href="css/anysearch.css" media="screen" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="js/anysearch.js"></script> 
+<script type="text/javascript">
+	$(document).ready(function() {
+		// search function
+		function fullSearch(string) {
+			alert(string);
+		}
+
+		// initialize anysearch plugin
+		$(document).anysearch({
+			searchFunc: function(search) {
+				fullSearch(search);
+			}
+		});
+
+	});
+
+</script>
+</head>
+    <body>
+
+		<h1>anysearch.js - jQuery Plugin</h1>
+		
+		<h3>Type something..</h3>
+		
+		<br /><br />
+		
+		<h4>API is coming soon.....</h4>
+
+    </body>
+</html>
