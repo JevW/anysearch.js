@@ -1,38 +1,33 @@
 /***********************************************************************
-************************************************************************
-************************************************************************
-
-Copyright [2013] [Eugen Wagner - Jev]
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
-***********************************************************************
-***********************************************************************
-***********************************************************************/
+ ************************************************************************
+ ************************************************************************
+ 
+ Copyright [2013] [Eugen Wagner - Jev]
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ 
+ http://www.apache.org/licenses/LICENSE-2.0
+ 
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+ 
+ ***********************************************************************
+ ***********************************************************************
+ ***********************************************************************/
 
 (function($) {
     $.fn.anysearch = function(options) {
+
         options = $.extend({
+            reactOnKeycodes: '48,49,50,51,52,53,54,55,56,57,94,176,33,34,167,36,37,38,47,40,41,61,63,96,180,223,178,179,123,91,93,125,92,113,119,101,114,116,122,117,105,111,112,252,43,35,228,246,108,107,106,104,103,102,100,115,97,60,121,120,99,118,98,110,109,44,46,45,81,87,69,82,84,90,85,73,79,80,220,42,65,83,68,70,71,72,74,75,76,214,196,39,62,89,88,67,86,66,78,77,59,58,95,64,8364,126,35,124,181',
             secondsBetweenKeypress: 2, // puffer between keypress
-            searchPattern: {1: '[^~,][^~,]*'}, // use http://txt2re.com/ 
-            searchFunc: function(string) {
-                console.log('search now.... ' + string + ' ....')
-            }, // executes function if press the enterKey
-            patternsNotMatchedAction: function() {
-            }, // action if all pattern not matched
-            minimumChars: 3, // minimum amout of keypressed chars before its possible to search,
-            minimumCharsNotReachedAction: function() {
-            },
+            searchPattern: {1: '[^~,]*'}, // * // use http://txt2re.com/ 
+            minimumChars: 3, // minimum amount of keypressed chars before its possible to search,
             liveField: false, // if one of this elements is focused -> do not check keypress
             // {selector: '#example', value: true} or 
             // {selector: '#example', html: true} or
@@ -40,20 +35,32 @@ limitations under the License.
             excludeFocus: 'input,textarea,select',
             enterKey: 13, // 13 == Enter
             backspaceKey: 8, // 8 == Backspace
-            checkIsBarcodeMilliseconds: 200, // milliseconds between keypressed string to check if is barcodescanner
+            checkIsBarcodeMilliseconds: 50, // milliseconds between keypressed string to check if is barcodescanner
             checkBarcodeMinLength: 4, // minimum length of the barcode
+            searchSlider: true, // searchslider active or not
             startAnysearchAction: function() {
             }, // Action if start keypress
             stopAnysearchAction: function() {
             }, // Action if keypress processed
-            searchSlider: true
+            minimumCharsNotReachedAction: function(string, stringLength, minimumChars) {
+            }, // Acdtion if minimum chars is not reached
+            searchFunc: function(string) {
+            }, // executes function if press the enterKey
+            patternsNotMatchedAction: function(string, patterns) {
+            } // action if all pattern not matched
         }, options);
 
         return this.each(function() {
 
+            var reactOnKeycodesArr = options.reactOnKeycodes.replace(/\s/g, "").split(',').map(function(x) {
+                return parseInt(x)
+            });
+
             var startTime = null;
             var keyTimestamp = null;
             var keypressArr = [];
+            var timeout = setTimeout(function() {
+            });
 
             // is last keypress XXX seconds ago 
             var checkIsValidTime = function(keyTimestamp, seconds) {
@@ -73,6 +80,9 @@ limitations under the License.
                 keypressArr = [];
                 keyTimestamp = null;
                 startTime = null;
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                });
             };
 
             // search function
@@ -101,7 +111,9 @@ limitations under the License.
                         return isBool = true;
                     }
                 });
-                options.patternsNotMatchedAction();
+                if (isBool === false) {
+                    options.patternsNotMatchedAction(string, options.searchPattern);
+                }
                 return isBool;
             };
 
@@ -137,7 +149,7 @@ limitations under the License.
                 if (string.length >= options.minimumChars) {
                     return true;
                 }
-                options.minimumCharsNotReachedAction();
+                options.minimumCharsNotReachedAction(string, string.length, options.minimumChars);
                 return false;
             };
 
@@ -171,12 +183,12 @@ limitations under the License.
                     if (doesAPatternMatch(string) === true && checkAmountKeypressedChars(string)) {
                         doSearch(string);
                     }
-                }
-                deleteKeypressArr();
-                fillLiveField(keypressArr);
-                options.stopAnysearchAction();
-                if (options.searchSlider === true) {
-                    animateCloseSearchbox();
+                    deleteKeypressArr();
+                    fillLiveField(keypressArr);
+                    options.stopAnysearchAction();
+                    if (options.searchSlider === true) {
+                        animateCloseSearchbox();
+                    }
                 }
             };
 
@@ -186,6 +198,13 @@ limitations under the License.
                 fillLiveField(keypressArr);
             };
 
+            var timeoutKeypress = function() {
+                clearTimeout(timeout);
+                timeout = setTimeout(function() {
+                    animateCloseSearchbox();
+                }, (options.secondsBetweenKeypress * 1000));
+            };
+
             // enter and backspace must be handled with keydown cause of some browsers keypress event 
             $(this).keydown(function(e) {
                 if (isAnElementFocused() === false) {
@@ -193,9 +212,13 @@ limitations under the License.
                             && (e.which === options.enterKey || e.which === options.backspaceKey)) {
                         keyTimestamp = new Date().getTime();
                         if (e.which === options.enterKey) {
+                            clearTimeout(timeout);
                             enterPressed();
                         }
                         if (e.which === options.backspaceKey) {
+                            if (options.searchSlider === true) {
+                                timeoutKeypress();
+                            }
                             backspacePressed(e);
                         }
                     }
@@ -205,7 +228,7 @@ limitations under the License.
             // handle keypress
             $(this).keypress(function(e) {
                 // if input aso is not focues && check keydownevents for bacspace and enter key
-                if (isAnElementFocused() === false && e.which !== options.backspaceKey && e.which !== options.enterKey) {
+                if (isAnElementFocused() === false && e.which !== options.backspaceKey && e.which !== options.enterKey && jQuery.inArray(e.which, reactOnKeycodesArr) >= 0) {
                     // completely new init or continuation
                     if ((checkIsValidTime(keyTimestamp) || keyTimestamp === null)) {
                         if (options.searchSlider === true) {
@@ -215,20 +238,19 @@ limitations under the License.
                         if (keyTimestamp === null && e.which !== options.enterKey && e.which !== options.backspaceKey) {
                             startTime = new Date().getTime();
                             options.startAnysearchAction();
-
                         }
                         // time of keypress
                         keyTimestamp = new Date().getTime();
                         keypressArr.push(e.which);
                         fillLiveField(keypressArr);
                     } else {
-                        // new init if time over
                         deleteKeypressArr();
                         fillLiveField(keypressArr);
-                        if (e.which !== options.enterKey) {
-                            keypressArr.push(e.which);
-                            fillLiveField(keypressArr);
-                        }
+                        keypressArr.push(e.which);
+                        fillLiveField(keypressArr);
+                    }
+                    if (options.searchSlider === true) {
+                        timeoutKeypress();
                     }
                 }
             });
@@ -252,6 +274,7 @@ limitations under the License.
 
                 // function for closing the searchsidebar
                 function animateCloseSearchbox() {
+                    deleteKeypressArr();
                     setTimeout(function() {
                         var button = $('#anysearch-slidebox').find('#anysearch-sidebutton');
                         if ($(button).hasClass('anysearchIsOpen')) {
