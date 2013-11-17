@@ -21,7 +21,7 @@ limitations under the License.
 ***********************************************************************/
 
 #anysearch-slidebox{
-    width:350px;
+    width:330px;
     position:fixed;
     bottom:0px;
     height: 70px;
@@ -49,7 +49,6 @@ limitations under the License.
 
 #anysearch-sidebutton{
     box-shadow: none;
-    border-color: rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.15) rgba(0, 0, 0, 0.25);
     -moz-border-bottom-colors: none;
     -moz-border-left-colors: none;
     -moz-border-right-colors: none;
@@ -57,14 +56,11 @@ limitations under the License.
     background-repeat: repeat-x;
     border-color: #B6BDC2 #B6BDC2 #9AA4AB;
     border-image: none;
-    border-radius: 5px;
     border-style: solid;
     border-width: 1px;
     color: #333333;
     cursor: pointer;
     display: inline-block;
-    font-size: 13px;
-    line-height: 20px;
     margin-bottom: 0;
     padding: 4px 12px;
     text-align: center;
@@ -73,7 +69,6 @@ limitations under the License.
     font-family: "Lucida Grande","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     font-weight: normal;
-    line-height: 20px;
     line-height: normal;
     border-radius: 14px 0 0 14px;
 }
@@ -83,14 +78,12 @@ limitations under the License.
 }
 
 #anysearch-sidebutton:hover{
-    background-position: 0 0;
     background-position: 0 -15px;
     text-decoration: none;
     transition: background-position 0.1s linear 0s;
 }
 
 #anysearch-sidebutton:active{
-    background-color: #E6E6E6;
     background-image: none;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15) inset, 0 1px 2px rgba(0, 0, 0, 0.05);
     outline: 0 none;
@@ -110,25 +103,18 @@ limitations under the License.
 }
 
 #anysearch-input{
-    background-color: #FFFFFF;
-    border: 1px solid #D1D2D3;
-    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
     border-radius: 3px;
     color: #555555;
     display: inline-block;
-    font-size: 13px;
-    height: 20px;
-    line-height: 20px;
-    margin-bottom: 10px;
+    height: 28px;
+    line-height: 28px;
     padding: 4px 6px;
     vertical-align: middle;
-    margin-left: 0;
     width: 90%;
     font-family: "Lucida Grande","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     font-weight: normal;
-    line-height: 20px;
     line-height: normal;
     margin: 0;
     vertical-align: middle;

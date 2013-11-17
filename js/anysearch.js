@@ -24,7 +24,7 @@
     $.fn.anysearch = function(options) {
 
         options = $.extend({
-            reactOnKeycodes: '48,49,50,51,52,53,54,55,56,57,94,176,33,34,167,36,37,38,47,40,41,61,63,96,180,223,178,179,123,91,93,125,92,113,119,101,114,116,122,117,105,111,112,252,43,35,228,246,108,107,106,104,103,102,100,115,97,60,121,120,99,118,98,110,109,44,46,45,81,87,69,82,84,90,85,73,79,80,220,42,65,83,68,70,71,72,74,75,76,214,196,39,62,89,88,67,86,66,78,77,59,58,95,64,8364,126,35,124,181',
+            reactOnKeycodes: 'string',
             secondsBetweenKeypress: 2, // puffer between keypress
             searchPattern: {1: '[^~,]*'}, // * // use http://txt2re.com/ 
             minimumChars: 3, // minimum amount of keypressed chars before its possible to search,
@@ -32,35 +32,55 @@
             // {selector: '#example', value: true} or 
             // {selector: '#example', html: true} or
             // {selector: '#example', attr: the attribute}
-            excludeFocus: 'input,textarea,select',
+            excludeFocus: 'input,textarea,select', // if element is focused disable anysearch
             enterKey: 13, // 13 == Enter
             backspaceKey: 8, // 8 == Backspace
             checkIsBarcodeMilliseconds: 50, // milliseconds between keypressed string to check if is barcodescanner
             checkBarcodeMinLength: 4, // minimum length of the barcode
             searchSlider: true, // searchslider active or not
-            startAnysearchAction: function() {
+            startAnysearch: function() {
             }, // Action if start keypress
-            stopAnysearchAction: function() {
+            stopAnysearch: function() {
             }, // Action if keypress processed
-            minimumCharsNotReachedAction: function(string, stringLength, minimumChars) {
+            minimumCharsNotReached: function(string, stringLength, minLength) {
             }, // Acdtion if minimum chars is not reached
             searchFunc: function(string) {
             }, // executes function if press the enterKey
-            patternsNotMatchedAction: function(string, patterns) {
-            } // action if all pattern not matched
+            patternsNotMatched: function(string, patterns) {
+            }, // action if all pattern not matched
+            isBarcode: function(barcode){
+            } // action if barcode input detected
         }, options);
 
         return this.each(function() {
-
-            var reactOnKeycodesArr = options.reactOnKeycodes.replace(/\s/g, "").split(',').map(function(x) {
-                return parseInt(x)
-            });
 
             var startTime = null;
             var keyTimestamp = null;
             var keypressArr = [];
             var timeout = setTimeout(function() {
             });
+            var reactOnKeycodes;
+            switch (options.reactOnKeycodes) {
+                case "string":
+                    reactOnKeycodes = '48,49,50,51,52,53,54,55,56,57,94,176,33,34,167,36,37,38,47,40,41,61,63,96,180,223,178,179,123,91,93,125,92,113,119,101,114,116,122,117,105,111,112,252,43,35,228,246,108,107,106,104,103,102,100,115,97,60,121,120,99,118,98,110,109,44,46,45,81,87,69,82,84,90,85,73,79,80,220,42,65,83,68,70,71,72,74,75,76,214,196,39,62,89,88,67,86,66,78,77,59,58,95,64,8364,126,35,124,181';
+                    break;
+                case "numeric":
+                    reactOnKeycodes = '43,45,48,49,50,51,52,53,54,55,56,57';
+                    break;
+                case "all":
+                    reactOnKeycodes = 'all';
+                    break;
+                default:
+                    reactOnKeycodes = options.reactOnKeycodes;
+                    break;
+            }
+
+            if (reactOnKeycodes !== 'all') {
+                var reactOnKeycodesArr = reactOnKeycodes.replace(/\s/g, "").split(',').map(function(x) {
+                    return parseInt(x);
+                });
+            }
+
 
             // is last keypress XXX seconds ago 
             var checkIsValidTime = function(keyTimestamp, seconds) {
@@ -112,7 +132,7 @@
                     }
                 });
                 if (isBool === false) {
-                    options.patternsNotMatchedAction(string, options.searchPattern);
+                    options.patternsNotMatched(string, options.searchPattern);
                 }
                 return isBool;
             };
@@ -140,6 +160,7 @@
                             string = string + splittedStringArr[i];
                         }
                     }
+                    options.isBarcode(string);
                 }
                 return string;
             };
@@ -149,7 +170,7 @@
                 if (string.length >= options.minimumChars) {
                     return true;
                 }
-                options.minimumCharsNotReachedAction(string, string.length, options.minimumChars);
+                options.minimumCharsNotReached(string, string.length, options.minimumChars);
                 return false;
             };
 
@@ -185,7 +206,7 @@
                     }
                     deleteKeypressArr();
                     fillLiveField(keypressArr);
-                    options.stopAnysearchAction();
+                    options.stopAnysearch();
                     if (options.searchSlider === true) {
                         animateCloseSearchbox();
                     }
@@ -203,6 +224,16 @@
                 timeout = setTimeout(function() {
                     animateCloseSearchbox();
                 }, (options.secondsBetweenKeypress * 1000));
+            };
+
+            var checkReactOnKeycode = function(e) {
+                if (reactOnKeycodes === 'all') {
+                    return true;
+                }
+                if (jQuery.inArray(e.which, reactOnKeycodesArr) >= 0) {
+                    return true;
+                }
+                return false;
             };
 
             // enter and backspace must be handled with keydown cause of some browsers keypress event 
@@ -228,7 +259,7 @@
             // handle keypress
             $(this).keypress(function(e) {
                 // if input aso is not focues && check keydownevents for bacspace and enter key
-                if (isAnElementFocused() === false && e.which !== options.backspaceKey && e.which !== options.enterKey && jQuery.inArray(e.which, reactOnKeycodesArr) >= 0) {
+                if (isAnElementFocused() === false && e.which !== options.backspaceKey && e.which !== options.enterKey && checkReactOnKeycode(e)) {
                     // completely new init or continuation
                     if ((checkIsValidTime(keyTimestamp) || keyTimestamp === null)) {
                         if (options.searchSlider === true) {
@@ -237,7 +268,7 @@
                         // init
                         if (keyTimestamp === null && e.which !== options.enterKey && e.which !== options.backspaceKey) {
                             startTime = new Date().getTime();
-                            options.startAnysearchAction();
+                            options.startAnysearch();
                         }
                         // time of keypress
                         keyTimestamp = new Date().getTime();
@@ -274,12 +305,13 @@
 
                 // function for closing the searchsidebar
                 function animateCloseSearchbox() {
-                    deleteKeypressArr();
                     setTimeout(function() {
                         var button = $('#anysearch-slidebox').find('#anysearch-sidebutton');
                         if ($(button).hasClass('anysearchIsOpen')) {
                             $('#anysearch-slidebox').stop(true).animate({'right': '-' + $('#anysearch-slidebox-content').outerWidth()}, 100);
                             $(button).removeClass('anysearchIsOpen');
+                            deleteKeypressArr();
+                            $('#anysearch-input').val('');
                         }
                     }, 25);
                 }
@@ -317,6 +349,11 @@
                             }
                         }
                     }
+                });
+
+                // if focus #anysearch-input -> clearTimeout for closing
+                $('#anysearch-input').focus(function() {
+                    clearTimeout(timeout);
                 });
             }
         });
