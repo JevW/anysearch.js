@@ -35,7 +35,7 @@
             excludeFocus: 'input,textarea,select', // if element is focused disable anysearch
             enterKey: 13, // 13 == Enter
             backspaceKey: 8, // 8 == Backspace
-            checkIsBarcodeMilliseconds: 50, // milliseconds between keypressed string to check if is barcodescanner
+            checkIsBarcodeMilliseconds: 25, // milliseconds between keypressed string to check if is barcodescanner
             checkBarcodeMinLength: 4, // minimum length of the barcode
             searchSlider: true, // searchslider active or not
             startAnysearch: function() {
@@ -48,7 +48,7 @@
             }, // executes function if press the enterKey
             patternsNotMatched: function(string, patterns) {
             }, // action if all pattern not matched
-            isBarcode: function(barcode){
+            isBarcode: function(barcode) {
             } // action if barcode input detected
         }, options);
 
@@ -59,7 +59,10 @@
             var keypressArr = [];
             var timeout = setTimeout(function() {
             });
-            var reactOnKeycodes;
+            var reactOnKeycodes = '';
+            var inputKeypressStartTime = null;
+
+
             switch (options.reactOnKeycodes) {
                 case "string":
                     reactOnKeycodes = '48,49,50,51,52,53,54,55,56,57,94,176,33,34,167,36,37,38,47,40,41,61,63,96,180,223,178,179,123,91,93,125,92,113,119,101,114,116,122,117,105,111,112,252,43,35,228,246,108,107,106,104,103,102,100,115,97,60,121,120,99,118,98,110,109,44,46,45,81,87,69,82,84,90,85,73,79,80,220,42,65,83,68,70,71,72,74,75,76,214,196,39,62,89,88,67,86,66,78,77,59,58,95,64,8364,126,35,124,181';
@@ -103,6 +106,7 @@
                 clearTimeout(timeout);
                 timeout = setTimeout(function() {
                 });
+                inputKeypressStartTime = null;
             };
 
             // search function
@@ -152,7 +156,7 @@
             var generateStringAfterPressEnter = function() {
                 var string = String.fromCharCode.apply(String, keypressArr);
                 // check is barcodescanner input
-                if (((keyTimestamp - startTime) < options.checkIsBarcodeMilliseconds) && (string.length >= (options.checkBarcodeMinLength * 4))) {
+                if (checkIsBarcode(string, 4, startTime, keyTimestamp)) {
                     var splittedStringArr = string.split('');
                     var string = "";
                     for (var i = 0; i < splittedStringArr.length; i++) {
@@ -163,6 +167,13 @@
                     options.isBarcode(string);
                 }
                 return string;
+            };
+
+            var checkIsBarcode = function(string, asciiPosition, startTime, keyTimestamp) {
+                if (((keyTimestamp - startTime) < options.checkIsBarcodeMilliseconds) && (string.length >= (options.checkBarcodeMinLength * asciiPosition))) {
+                    return true;
+                }
+                return false;
             };
 
             // function check length of a string
@@ -338,9 +349,18 @@
                 });
 
                 // if search-input is focused --> bind search if press enter
-                $('#anysearch-input').keypress(function(e) {
+                $('#anysearch-input').keydown(function(e) {
+                    if (inputKeypressStartTime === null) {
+                        inputKeypressStartTime = new Date().getTime();
+                        options.startAnysearch();
+                    }
                     if (e.which === 13) {
                         var string = $(this).val();
+                        var now = new Date().getTime();
+                        if (checkIsBarcode(string, 1, inputKeypressStartTime, now)) {
+                            options.isBarcode(string);
+                        }
+                        inputKeypressStartTime = null;
                         if (string.length >= 1) {
                             if (doesAPatternMatch(string) === true && checkAmountKeypressedChars(string)) {
                                 doSearch(string);
@@ -348,6 +368,7 @@
                                 $(this).val('');
                             }
                         }
+                        options.stopAnysearch();
                     }
                 });
 

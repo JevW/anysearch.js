@@ -11,25 +11,21 @@
                 // initialize anysearch plugin
                 $(document).anysearch({
                     searchFunc: function(search) {
-                        alert(search);
+                        alert('Search: ' + search);
+                    },
+                    isBarcode: function(barcode) {
+                        alert('Barcode: ' + barcode);
                     }
                 });
             });
         </script>
     </head>
     <body>
-
         <h1>anysearch.js - jQuery Plugin</h1>
-
-        <h3>Type something..</h3>
-
-        <br /><br />
-
-        <h4>API is coming soon.....</h4>
-        
-        
-        Da ich für ein Projekt eine Suche entwickeln wollte, die dem Benutzer das Reinklicken in ein Formular erspart, Eingaben von einem Barcode Scanner erkennt und richtig behandelt, Eingaben vor dem Abschicken an ein serversetiges Script filtert und optional einen schönen Slider mit Suchfeld beinhaltet, habe ich anysearch.js geschrieben. Das Plugin werde ich nach und nach weiter verfeinern und erweitern. Gerne nehme ich Vorschläge für Verbesserungen entgegen.
-        
-
+        <br />
+        <h2>Type something or scan a Barcode........................</h2>
+        <br />
+        <h3>Project site</h3>
+        <a href="http://www.jevnet.de/anysearch-js.html">anysearch.js project site</a>
     </body>
 </html>

@@ -21,24 +21,25 @@ limitations under the License.
 ***********************************************************************/
 
 #anysearch-slidebox{
-    width:330px;
+    width:340px;
     position:fixed;
     bottom:0px;
     height: 70px;
     position: fixed;
     top: 250px;
     z-index: 10000;
+    padding: 0;
+    margin: 0;
 }
 
 #anysearch-slidebox-button {
-    width: 40px;
+    width: 50px;
     height: 100%;
     float: left;
 }
 
 #anysearch-slidebox-content {
     width: 290px;
-    padding: 10px 10px 10px 10px;
     height: 100%;
     float: left;
     -moz-box-shadow:-2px 0px 5px #aaa;
@@ -71,6 +72,7 @@ limitations under the License.
     font-weight: normal;
     line-height: normal;
     border-radius: 14px 0 0 14px;
+    float: right;
 }
 
 #anysearch-sidebutton:focus{
@@ -107,16 +109,16 @@ limitations under the License.
     border-radius: 3px;
     color: #555555;
     display: inline-block;
-    height: 28px;
-    line-height: 28px;
+    height: 28px !important;
+    line-height: 28px !important;
     padding: 4px 6px;
     vertical-align: middle;
-    width: 90%;
+    width: 250px;
+    margin: 10px 0 0 10px;
     font-family: "Lucida Grande","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 13px;
     font-weight: normal;
     line-height: normal;
-    margin: 0;
     vertical-align: middle;
     background-color: #FFFFFF;
     border: 1px solid #D1D2D3;
