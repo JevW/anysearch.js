@@ -1,12 +1,12 @@
 anysearch.js
 ============
-Search jQuery plugin with barcode scanner support
+jQuery plugin - direct search in browser with barcode scanner support
 
 Project site
 ============
 http://www.jevnet.de/anysearch-js.html
 
 
-anysearch.js Demo
+Demo
 ============
 http://www.jevnet.de/anysearch-js-demo.html
