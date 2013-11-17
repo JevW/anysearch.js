@@ -1,6 +1,6 @@
-anysearch.js
+anysearch.js - jQuery plugin
 ============
-jQuery plugin - direct search in browser with barcode scanner support
+Direct search in browser with barcode scanner support
 
 Project site
 ============
