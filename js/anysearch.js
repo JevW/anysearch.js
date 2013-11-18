@@ -375,6 +375,7 @@
                 // if focus #anysearch-input -> clearTimeout for closing
                 $('#anysearch-input').focus(function() {
                     clearTimeout(timeout);
+                    $(this).val('');
                 });
             }
         });
