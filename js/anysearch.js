@@ -121,7 +121,6 @@
                 var excludeFocusArr = options.excludeFocus.split(',');
                 $.each(excludeFocusArr, function(i, elem) {
                     if ($('' + $.trim(elem)).is(':focus')) {
-                        console.log('focused');
                         return isBool = true;
                     }
                 });
