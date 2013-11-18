@@ -35,7 +35,7 @@
             excludeFocus: 'input,textarea,select', // if element is focused disable anysearch
             enterKey: 13, // 13 == Enter
             backspaceKey: 8, // 8 == Backspace
-            checkIsBarcodeMilliseconds: 25, // milliseconds between keypressed string to check if is barcodescanner
+            checkIsBarcodeMilliseconds: 250, // milliseconds between keypressed string to check if is barcodescanner 
             checkBarcodeMinLength: 4, // minimum length of the barcode
             searchSlider: true, // searchslider active or not
             startAnysearch: function() {
@@ -116,10 +116,12 @@
 
             // is an element focused
             var isAnElementFocused = function() {
+
                 var isBool = false;
                 var excludeFocusArr = options.excludeFocus.split(',');
                 $.each(excludeFocusArr, function(i, elem) {
                     if ($('' + $.trim(elem)).is(':focus')) {
+                        console.log('focused');
                         return isBool = true;
                     }
                 });
@@ -322,7 +324,7 @@
                             $('#anysearch-slidebox').stop(true).animate({'right': '-' + $('#anysearch-slidebox-content').outerWidth()}, 100);
                             $(button).removeClass('anysearchIsOpen');
                             deleteKeypressArr();
-                            $('#anysearch-input').val('');
+                            $('#anysearch-input').val('').blur();
                         }
                     }, 25);
                 }
@@ -350,7 +352,7 @@
 
                 // if search-input is focused --> bind search if press enter
                 $('#anysearch-input').keydown(function(e) {
-                    if (inputKeypressStartTime === null) {
+                    if (inputKeypressStartTime === null && e.which !== 13) {
                         inputKeypressStartTime = new Date().getTime();
                         options.startAnysearch();
                     }
@@ -365,7 +367,6 @@
                             if (doesAPatternMatch(string) === true && checkAmountKeypressedChars(string)) {
                                 doSearch(string);
                                 animateCloseSearchbox();
-                                $(this).val('');
                             }
                         }
                         options.stopAnysearch();
