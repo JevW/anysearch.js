@@ -1,0 +1,35 @@
+{
+    "name": "anysearch",
+    "title": "anysearch.js - direct search with barcode scanner support",
+    "description": "jQuery Plugin for a direct search in browser without a form. anysearch.js supports barcode scanners.",
+    "keywords": [
+        "search",
+        "fast",
+        "direct",
+        "browser",
+        "input",
+        "form",
+        "barcode",
+        "scanner",
+        "slider"
+    ],
+    "version": "1.0.0",
+    "author": {
+        "name": "Jev",
+        "url": "http://www.jevnet.de"
+    },
+    "licenses": [
+        {
+            "type": "Apache License, Version 2.0",
+            "url": "http://opensource.org/licenses/Apache-2.0"
+        }
+    ],
+    "bugs": "https://github.com/JevW/anysearch.js/issues",
+    "homepage": "http://www.jevnet.de/anysearch-js.html",
+    "docs": "http://www.jevnet.de/anysearch-js.html",
+    "demo": "http://www.jevnet.de/anysearch-js-demo.html",
+    "download": "https://github.com/JevW/anysearch.js",
+    "dependencies": {
+        "jquery": ">=1.9"
+    }
+}
