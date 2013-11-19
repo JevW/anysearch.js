@@ -28,7 +28,7 @@
     "homepage": "http://www.jevnet.de/anysearch-js.html",
     "docs": "http://www.jevnet.de/anysearch-js.html",
     "demo": "http://www.jevnet.de/anysearch-js-demo.html",
-    "download": "https://github.com/JevW/anysearch.js",
+    "download": "http://github.com/JevW/anysearch.js/zipball/master/",
     "dependencies": {
         "jquery": ">=1.7"
     }
