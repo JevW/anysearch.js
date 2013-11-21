@@ -59,7 +59,8 @@ false</pre></td></tr>
     // do something 
 }</pre></td></tr>
                         <tr><td>minimumCharsNotReached:</td><td>function(string, stringLength, minLength){}</td><td>Callback function will be triggered if the length of the search string is lower then the value of "minimumChars". <br /><br />Options:<br /><pre>function(string, stringLength, minLength){ 
-    // do something with string, stringLength, minLength 
+    // do something with string, 
+    // stringLength, minLength 
 }</pre></td></tr>
                         <tr><td>searchFunc:</td><td>function(string){}</td><td>Callback function for the search (e.g. serverside script).<br /><br />Options:<br /><pre>function(string){ 
     // do something with the string 
