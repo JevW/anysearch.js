@@ -49,7 +49,7 @@ http://www.jevnet.de/anysearch-js.html
                         <tr><td>enterKey:</td><td>13</td><td>ASCII Keycode for Enter.<br /><br />Options:<br /><pre>ASCII charcode</pre></td></tr>
                         <tr><td>backspaceKey:</td><td>8</td><td>ASCII Keycode for Backspace.<br /><br />Options:<br /><pre>ASCII charcode</pre></td></tr>
                         <tr><td>checkIsBarcodeMilliseconds:</td><td>250</td><td>Time in milliseconds the barcode scanner is allowed to need for a scan.<br /><br />Options:<br /><pre>1 - 9999</pre></td></tr>
-                        <tr><td>checkBarcodeMinLength:</td><td>4</td><td>Minimum amount of characters for a barcode.<br /><br />Options:<br /><pre>1 - 99</pre>/td></tr>
+                        <tr><td>checkBarcodeMinLength:</td><td>4</td><td>Minimum amount of characters for a barcode.<br /><br />Options:<br /><pre>1 - 99</pre></td></tr>
                         <tr><td>searchSlider:</td><td>true</td><td>Activates searchslider with inputfield.<br /><br />Options:<br /><pre>true
 false</pre></td></tr>
                         <tr><td>startAnysearch:</td><td>function(){}</td><td>Callback function will be triggered by first reaction of anysearch.js<br /><br />Options:<br /><pre>function(){ 
