@@ -24,7 +24,7 @@ http://www.jevnet.de/anysearch-js.html
 
 <div class="bs-example">
     <h2>Options and configuration</h2>
-                <table class="table table-bordered">
+                <table>
                     <thead>
                         <tr>
                             <th>Option</th>
