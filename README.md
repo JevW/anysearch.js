@@ -36,7 +36,7 @@ http://www.jevnet.de/anysearch-js.html
                         <tr><td>reactOnKeycodes:</td><td>'string'</td><td>Search only reacts on given ASCII Keycodes.<br /><br />Options:<br /><pre>'all'
 'string'
 'numeric'
-'48,49,50,51,52,53,54,55,56,57' // ASCII char codes</pre></td></tr>
+'48,49,50,51,52,53,54,55,56,57' // e.g.</pre></td></tr>
                         <tr><td>secondsBetweenKeypress:</td><td>2</td><td>After given time anysearch.js clears the search string. anysearch.js resets the timer on each keystroke.<br /><br />Options:<br /><pre>0.001 - 99</pre></td></tr>
                         <tr><td>searchPattern:</td><td>{1: '[^~,]*'}</td><td>Filters the input string, before it is sent to the search.<br /><br />Options:<br /><pre>// JSON Object of regular expressions
 {1: '(\\d+)', 2: '((?:[a-z][0-9]+))'}</pre></td></tr>
