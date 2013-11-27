@@ -12,15 +12,22 @@ http://www.jevnet.de/anysearch-js-demo.html<br>
 http://www.jevnet.de/anysearch-js.html
 
 <div class="bs-example">
-    <h2>Usage</h2>
-    <pre>$(document).ready(function() { 
+    <h3>Usage & Setup</h3>
+    <br />
+    1. Include the latest JQuery javascript library on your web page.
+    <pre style="margin:10px 0">&lt;script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"&gt;&lt;/script&gt;</pre>
+    2. Include anysearch.js and anysearch.css on your page.
+    <pre style="margin:10px 0">&lt;link href="css/anysearch.css" rel="stylesheet"&gt;
+&lt;script src="js/anysearch.js"&gt;&lt;/script&gt;</pre>
+                3. Usage
+                <pre style="margin:10px 0">$(document).ready(function() { 
     $(document).anysearch({
         searchFunc: function(search) {
             alert(search);
         }
     });
 });</pre>
-</div>
+            </div>
 
 <div class="bs-example">
     <h2>Options & configuration</h2>
