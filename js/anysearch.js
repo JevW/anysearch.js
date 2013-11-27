@@ -1,57 +1,126 @@
 /***********************************************************************
-The MIT License (MIT)
-
-Copyright (c) 2013 Eugen Wagner - Jev
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
-***********************************************************************/
+ The MIT License (MIT)
+ 
+ Copyright (c) 2013 Eugen Wagner - Jev
+ 
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
+ 
+ The above copyright notice and this permission notice shall be included in
+ all copies or substantial portions of the Software.
+ 
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ THE SOFTWARE.
+ ***********************************************************************/
 
 (function($) {
     $.fn.anysearch = function(options) {
 
         options = $.extend({
-            reactOnKeycodes: 'string',
-            secondsBetweenKeypress: 2, // puffer between keypress
-            searchPattern: {1: '[^~,]*'}, // * // use http://txt2re.com/ 
-            minimumChars: 3, // minimum amount of keypressed chars before its possible to search,
-            liveField: false, // if one of this elements is focused -> do not check keypress
-            // {selector: '#example', value: true} or 
-            // {selector: '#example', html: true} or
-            // {selector: '#example', attr: the attribute}
-            excludeFocus: 'input,textarea,select', // if element is focused disable anysearch
-            enterKey: 13, // 13 == Enter
-            backspaceKey: 8, // 8 == Backspace
-            checkIsBarcodeMilliseconds: 250, // milliseconds between keypressed string to check if is barcodescanner 
-            checkBarcodeMinLength: 4, // minimum length of the barcode
-            searchSlider: true, // searchslider active or not
-            startAnysearch: function() {
-            }, // Action if start keypress
-            stopAnysearch: function() {
-            }, // Action if keypress processed
-            minimumCharsNotReached: function(string, stringLength, minLength) {
-            }, // Acdtion if minimum chars is not reached
-            searchFunc: function(string) {
-            }, // executes function if press the enterKey
-            patternsNotMatched: function(string, patterns) {
-            }, // action if all pattern not matched
-            isBarcode: function(barcode) {
-            } // action if barcode input detected
+            reactOnKeycodes: 'string',                                      // Search only reacts on given ASCII Keycodes.
+                                                                            // Options:
+                                                                            // 'all'
+                                                                            // 'string'
+                                                                            // 'numeric'
+                                                                            // '48,49,50,51,52,53,54,55,56,57'
+                                                                            // -----------------------------------------------
+            secondsBetweenKeypress: 2,                                      // After given time anysearch.js clears the search 
+                                                                            // string. anysearch.js resets the timer on each 
+                                                                            // keystroke.
+                                                                            // Options:
+                                                                            // 0.001 - 99
+                                                                            // -----------------------------------------------
+            searchPattern: {1: '[^~,]*'},                                   // Filters the input string, before it is sent to 
+                                                                            // the search.
+                                                                            // Options:
+                                                                            // {1: '(\\d+)', 2: '((?:[a-z][0-9]+))'}
+                                                                            // -----------------------------------------------
+            minimumChars: 3,                                                // Necessary amount of charakters to start the 
+                                                                            // search script.
+                                                                            // Options: 
+                                                                            // 1 - 99
+                                                                            // -----------------------------------------------
+            liveField: false,                                               // Given selector will be filled in realtime on 
+                                                                            // writing.
+                                                                            // Options:
+                                                                            // false
+                                                                            // {selector: '#example', value: true}
+                                                                            // {selector: '#example', html: true}
+                                                                            // {selector: '#example', attr: 'title'}
+                                                                            // -----------------------------------------------
+            excludeFocus: 'input,textarea,select',                          // While one of the given selectors focused, 
+                                                                            // anysearch will be deactivated.
+                                                                            // Options:
+                                                                            // selector
+                                                                            // -----------------------------------------------
+            enterKey: 13,                                                   // ASCII Keycode for Enter.
+                                                                            // Options:
+                                                                            // ASCII charcode
+                                                                            // -----------------------------------------------
+            backspaceKey: 8,                                                // ASCII Keycode for Backspace.
+                                                                            // Options:
+                                                                            // ASCII charcode
+                                                                            // -----------------------------------------------
+            checkIsBarcodeMilliseconds: 250,                                // Time in milliseconds the barcode scanner is 
+                                                                            // allowed to need for a scan.
+                                                                            // Options:
+                                                                            // 1 - 9999
+                                                                            // -----------------------------------------------
+            checkBarcodeMinLength: 4,                                       // Minimum amount of characters for a barcode.
+                                                                            // Options:
+                                                                            // 1 - 99
+                                                                            // -----------------------------------------------
+            searchSlider: true,                                             // Activates searchslider with inputfield.
+                                                                            // Options:
+                                                                            // true
+                                                                            // false
+                                                                            // -----------------------------------------------
+            startAnysearch: function() {},                                  // Callback function will be triggered by first 
+                                                                            // reaction of anysearch.js
+                                                                            // Options:
+                                                                            // function(){ // do something }
+                                                                            // -----------------------------------------------
+            stopAnysearch: function() {},                                   // Callback function will be triggered once 
+                                                                            // anysearch.js ends.
+                                                                            // Options:
+                                                                            // function(){ // do something }
+                                                                            // -----------------------------------------------
+            minimumCharsNotReached: function(string, length, minLength) {}, // Callback function will be triggered if the 
+                                                                            // length of the search string is lower then the 
+                                                                            // value of "minimumChars".
+                                                                            // Options:
+                                                                            // function(string, length, minLength){ 
+                                                                            //     do something with string, length, minLength 
+                                                                            // }
+                                                                            // -----------------------------------------------
+            searchFunc: function(string) {},                                // Callback function for the search 
+                                                                            // (e.g. serverside script).
+                                                                            // Options:
+                                                                            // function(string){ 
+                                                                            //     do something with the string 
+                                                                            // }
+                                                                            // -----------------------------------------------             
+            patternsNotMatched: function(string, patterns) {},              // Callback function will be triggered 
+                                                                            // if "searchPattern" returns false.
+                                                                            // Options:
+                                                                            // function(string, patterns){ 
+                                                                            //     do something with string or patterns 
+                                                                            // }
+                                                                            // ----------------------------------------------- 
+            isBarcode: function(barcode) {}                                 // Callback function will be triggered if a barcode is detected.
+                                                                            // Options:
+                                                                            // function(barcode){ 
+                                                                            //     do something with the barcode 
+                                                                            // }
         }, options);
 
         return this.each(function() {
@@ -381,4 +450,4 @@ THE SOFTWARE.
             }
         });
     };
-})(jQuery); 
+})(jQuery);
