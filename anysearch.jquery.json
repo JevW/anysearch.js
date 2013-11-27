@@ -13,9 +13,9 @@
         "scanner",
         "slider"
     ],
-    "version": "1.0.2",
+    "version": "1.0.3",
     "author": {
-        "name": "Jev",
+        "name": "Eugen Wagner",
         "url": "http://www.jevnet.de"
     },
     "licenses": [
